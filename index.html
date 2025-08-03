@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dons Crypto Non-Custodial</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --radius: 14px;
+      --shadow: 0 20px 60px rgba(0,0,0,0.2);
+      --bg:#0f1f36;
+      --card:#1f2f54;
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body {
+      margin:0;
+      background: linear-gradient(135deg,#0f1f36 0%,#1f3a6a 60%);
+      color:#e8eef7;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1rem;
+    }
+    .wrapper {
+      max-width:1000px;
+      width:100%;
+      display:grid;
+      gap:1.5rem;
+      grid-template-columns:1fr 1fr;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding:2rem;
+      box-shadow: var(--shadow);
+    }
+    h1 { margin:0; font-size:2rem; }
+    .sub { font-size:0.9rem; color:#b8c7e0; margin-top:4px; }
+    .crypto-card {
+      background: linear-gradient(135deg,#1f3f75,#11284f);
+      padding:1.2rem; border-radius:12px; position:relative;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .title {
+      display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.2rem;
+    }
+    .address-box {
+      background: rgba(255,255,255,0.08);
+      padding:10px 14px;
+      border-radius:8px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:6px;
+      font-size:0.85rem;
+    }
+    code { background: rgba(255,255,255,0.05); padding:4px 8px; border-radius:5px; }
+    .controls { display:flex; gap:12px; flex-wrap:wrap; }
+    .input { flex:1; min-width:150px; }
+    .amount {
+      width:100%;
+      padding:10px 14px;
+      border:none;
+      border-radius:8px;
+      font-size:1rem;
+      background:#0f2a5f;
+      color:#fff;
+      outline:none;
+    }
+    .select { padding:10px 12px; border-radius:8px; background:#0f2a5f; color:#fff; border:none; font-size:0.9rem; }
+    .btn {
+      padding:12px 16px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      transition:filter .2s;
+    }
+    .primary { background:#5ac8fa; color:#0f2035; }
+    .secondary { background:rgba(255,255,255,0.08); color:#e8eef7; }
+    .btn:hover { filter:brightness(1.1); }
+    .qr { margin-top:6px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .qr canvas { background:#0f203f; border-radius:10px; }
+    .status { font-size:0.85rem; margin-top:4px; }
+    .notice {
+      grid-column:1/-1;
+      background: rgba(90,200,250,0.12);
+      padding:12px 16px;
+      border-radius:10px;
+      font-size:0.85rem;
+    }
+    .footer {
+      grid-column:1/-1;
+      font-size:0.65rem;
+      text-align:center;
+      margin-top:8px;
+      color:#a5b0d0;
+    }
+    .logo { width:28px; height:28px; }
+    .inline { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .small { font-size:0.75rem; color:#c0cfe8; }
+    .code-block {
+      background: rgba(0,0,0,0.15);
+      padding:10px;
+      border-radius:6px;
+      overflow-x:auto;
+      font-size:0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper" aria-label="Page de dons bitcoin, TRX, USDT TRC20">
+    <div style="grid-column:1/-1;">
+      <div class="inline">
+        <div>
+          <h1>Dons Crypto Anonymes</h1>
+          <div class="sub">Recevoir uniquement : Bitcoin (BTC), Tron (TRX) et USDT (TRC20). Non-custodial. Donateur confirme dans son wallet.</div>
+        </div>
+        <div style="margin-left:auto;">
+          <img src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/128/color/bitcoin.png" class="logo" alt="BTC">
+          <img src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/128/color/tron.png" class="logo" alt="TRX">
+          <img src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/128/color/tether.png" class="logo" alt="USDT">
+        </div>
+      </div>
+    </div>
+
+    <!-- BTC -->
+    <div class="crypto-card">
+      <div class="title">
+        <img src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/128/color/bitcoin.png" width="32" height="32" alt="Bitcoin"> Bitcoin (BTC)
+      </div>
+      <div class="address-box">
+        <div><strong>Adresse :</strong> <code id="addr-btc">3KTEUPbjkk3BW9cE7NSooaRL9K2wxV3WK4</code></div>
+        <div class="inline">
+          <button class="btn secondary" onclick="copyToClipboard('addr-btc')">Copier</button>
+          <div class="small">Transfert via URI bitcoin: avec montant pré-rempli</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="input">
+          <input type="number" id="amount-btc" class="amount" placeholder="Montant en BTC (ex: 0.001)" step="0.000001" min="0" aria-label="Montant BTC">
+        </div>
+        <div>
+          <button class="btn primary" onclick="startBTC()">Je donne</button>
+        </div>
+      </div>
+      <div class="qr" aria-label="QR code Bitcoin">
+        <div>
+          <canvas id="qr-btc" width="160" height="160"></canvas>
+        </div>
+        <div style="flex:1;">
+          <div id="summary-btc">Prépare ton don en BTC.</div>
+          <div class="status" id="status-btc">Aucun don en cours.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRX / USDT -->
+    <div class="crypto-card">
+      <div class="title">
+        <img src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/128/color/tron.png" width="32" height="32" alt="Tron"> Tron (TRX) &amp; USDT (TRC20)
+      </div>
+      <div class="address-box">
+        <div><strong>Adresse :</strong> <code id="addr-tron">TMbYvAcLqwrsF3U35aUYCYiWcBVMyu3Hot</code></div>
+        <div class="inline">
+          <button class="btn secondary" onclick="copyToClipboard('addr-tron')">Copier</button>
+          <div class="small">Pour TRX on utilise tron: URI ; pour USDT TRC20 voir instruction.</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="input" style="flex:2;">
+          <input type="number" id="amount-trx" class="amount" placeholder="Montant (ex : 10)" step="0.1" min="0" aria-label="Montant TRX ou USDT">
+        </div>
+        <div>
+          <select id="token" class="select" aria-label="Choix token">
+            <option value="trx">TRX</option>
+            <option value="usdt">USDT (TRC20)</option>
+          </select>
+        </div>
+        <div>
+          <button class="btn primary" onclick="startTRX()">Je donne</button>
+        </div>
+      </div>
+      <div class="qr" aria-label="QR code Tron / USDT">
+        <div>
+          <canvas id="qr-tron" width="160" height="160"></canvas>
+        </div>
+        <div style="flex:1;">
+          <div id="summary-trx">Prépare ton don en TRX ou USDT.</div>
+          <div class="status" id="status-trx">Aucun don en cours.</div>
+        </div>
+      </div>
+      <div id="usdt-instruction" style="display:none; margin-top:8px;">
+        <div class="small">
+          Pour envoyer <strong>USDT (TRC20)</strong> : copie la commande ci-dessous et colle-la dans ton wallet compatible TRC20 (ex : TronLink) en précisant le montant. Exemple de description que tu peux afficher à l'utilisateur :
+        </div>
+        <div class="code-block" id="usdt-code">
+          // Envoyer X USDT (TRC20) à l'adresse : TExampleTronAddress1234567890123456
+        </div>
+      </div>
+    </div>
+
+    <div class="notice">
+      Ce site est <strong>non-custodial</strong>. Les clés privées ne sont jamais stockées ici. Le donateur doit confirmer la transaction dans son wallet. Les URI (bitcoin: et tron:) pré-remplissent le destinataire et le montant pour faciliter l’envoi. Pour USDT TRC20, il faut copier l’instruction manuellement si le wallet ne supporte pas de deep link direct.
+    </div>
+
+    <div class="footer">
+      © 2025 • Dons Crypto Anonymes • Ne partage jamais ta clé privée. Vérifie toujours l’adresse avant d’envoyer. Transactions irréversibles.
+    </div>
+  </div>
+
+  <!-- QR library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qriously/4.0.2/qriously.min.js" integrity="sha512-+xDqI8N4F6l9KzE2wP3lO7+7k9YxVQpSfJ5I/XDszp6x+U/kiqHnGG8qZxMytPZ/oo0ioqktgTk2dS8lyPdL6w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    // Adresses : remplacer par vraies
+    const addrBTCEl = document.getElementById('addr-btc');
+    const addrTronEl = document.getElementById('addr-tron');
+    const addressBTC = addrBTCEl.textContent.trim();
+    const addressTron = addrTronEl.textContent.trim();
+
+    // Initial QR par défaut
+    const qrBTC = new QRious({ element: document.getElementById('qr-btc'), value: `bitcoin:${addressBTC}`, size: 160 });
+    const qrTron = new QRious({ element: document.getElementById('qr-tron'), value: `tron:${addressTron}`, size: 160 });
+
+    function copyToClipboard(id) {
+      const txt = document.getElementById(id).textContent.trim();
+      navigator.clipboard.writeText(txt).then(() => {
+        alert('Copié : ' + txt);
+      });
+    }
+
+    // Lancer don BTC (ouvre wallet)
+    function startBTC() {
+      const amt = document.getElementById('amount-btc').value;
+      if (!amt || parseFloat(amt) <= 0) {
+        alert('Entre un montant valide en BTC');
+        return;
+      }
+      const uri = `bitcoin:${addressBTC}?amount=${amt}`;
+      document.getElementById('summary-btc').textContent = `Préparation : ${amt} BTC → ${addressBTC}`;
+      document.getElementById('status-btc').textContent = 'Ouverture du wallet...';
+      qrBTC.value = uri;
+      // Essaie d'ouvrir le wallet via URI
+      window.location.href = uri;
+      // Fallback : affichage
+      setTimeout(() => {
+        document.getElementById('status-btc').textContent = 'Si rien ne s’est ouvert, scanne le QR ou copie l’URI : ' + uri;
+      }, 1000);
+    }
+
+    // Lancer don TRX / USDT
+    function startTRX() {
+      const amt = document.getElementById('amount-trx').value;
+      const token = document.getElementById('token').value;
+      if (!amt || parseFloat(amt) <= 0) {
+        alert('Entre un montant valide');
+        return;
+      }
+      if (token === 'trx') {
+        const uri = `tron:${addressTron}?amount=${amt}`;
+        document.getElementById('summary-trx').textContent = `Préparation : ${amt} TRX → ${addressTron}`;
+        document.getElementById('status-trx').textContent = 'Ouverture du wallet...';
+        qrTron.value = uri;
+        window.location.href = uri;
+        setTimeout(() => {
+          document.getElementById('status-trx').textContent = 'Si rien ne s’est ouvert, scanne le QR ou copie l’URI : ' + uri;
+        }, 1000);
+        document.getElementById('usdt-instruction').style.display = 'none';
+      } else {
+        // USDT TRC20 : instruction manuelle
+        document.getElementById('summary-trx').textContent = `Préparation : ${amt} USDT (TRC20) → ${addressTron}`;
+        document.getElementById('status-trx').textContent = 'Instruction affichée ci-dessous.';
+        document.getElementById('usdt-instruction').style.display = 'block';
+        document.getElementById('usdt-code').textContent = `Envoyer ${amt} USDT (TRC20) à l'adresse : ${addressTron}`;
+        // QR reste adresse seule
+        qrTron.value = `tron:${addressTron}`;
+      }
+    }
+  </script>
+</body>
+</html>
